@@ -33,25 +33,13 @@
             android:name=".APPAplication"
     android:hardwareAccelerated="true"
         >
-
-
-        <!--        <service-->
-<!--            android:name=".DeskService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:process=":daemon_service" />-->
-<!--        <service-->
-<!--            android:name=".CancelNoticeService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:process=":service" />-->
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
             android:label="dexopt"
             android:process=":dexopt">
         </service>
         <activity
-            android:name=".MainActivityTBSX5"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

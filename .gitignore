@@ -15,3 +15,5 @@
 .cxx
 local.properties
 
+app/src/main/assets
+app/release
