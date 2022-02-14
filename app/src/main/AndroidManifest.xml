@@ -30,8 +30,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Tsapp"
-            android:name=".APPAplication"
-    android:hardwareAccelerated="true"
+        android:name=".APPAplication"
+        android:hardwareAccelerated="true"
         >
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
@@ -43,7 +43,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
