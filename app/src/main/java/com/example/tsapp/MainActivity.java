@@ -3,8 +3,6 @@ package com.example.tsapp;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -13,12 +11,21 @@ import android.view.Window;
 import android.webkit.JavascriptInterface;
 
 import com.example.tsapp.utils.X5WebView;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.GeolocationPermissions;
+import com.tencent.smtt.sdk.WebIconDatabase;
+import com.tencent.smtt.sdk.WebStorage;
+import com.tencent.smtt.sdk.WebViewDatabase;
+
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -161,6 +168,41 @@ public class MainActivity extends Activity {
             }
         }
 
+    }
+
+    @JavascriptInterface
+    public String getSoft() {
+        android.util.Log.i("tt","getSoft了");
+        HashMap<String,Object> map = new HashMap<>();
+        String version = "2.2";
+        boolean isX5 = false;
+        if(mWebView.getX5WebViewExtension()!=null){
+            isX5 = true;
+        }
+        android.util.Log.i("tt",version);
+        android.util.Log.i("tt",String.valueOf(isX5));
+        map.put("version", version);
+        map.put("webview", isX5);
+        String json = new JSONObject(map).toString();
+        return json;
+    }
+
+    @JavascriptInterface
+    public void resetCache() {
+        //清除cookie
+        CookieManager.getInstance().removeAllCookies(null);
+        //清除storage相关缓存
+        WebStorage.getInstance().deleteAllData();
+        //清除用户密码信息
+        WebViewDatabase.getInstance(mContext).clearUsernamePassword();
+        //清除httpauth信息
+        WebViewDatabase.getInstance(mContext).clearHttpAuthUsernamePassword();
+        //清除表单数据
+        WebViewDatabase.getInstance(mContext).clearFormData();
+        //清除页面icon图标信息
+        WebIconDatabase.getInstance().removeAllIcons();
+        //删除地理位置授权，也可以删除某个域名的授权（参考接口类）
+        GeolocationPermissions.getInstance().clearAll();
     }
 
     @JavascriptInterface

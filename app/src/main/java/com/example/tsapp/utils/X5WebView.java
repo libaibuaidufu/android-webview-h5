@@ -58,7 +58,7 @@ public class X5WebView extends WebView {
 		webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
 		// webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
 //		webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE);
-		webSetting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		webSetting.setCacheMode(WebSettings.LOAD_DEFAULT);
 		// this.getSettingsExtension().setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);//extension
 		// settings 的设计
 	}

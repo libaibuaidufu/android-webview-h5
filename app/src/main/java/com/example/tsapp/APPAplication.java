@@ -21,11 +21,10 @@ public class APPAplication extends Application {
         HashMap map = new HashMap();
         map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
         map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
+        QbSdk.setDownloadWithoutWifi(true);
         QbSdk.initTbsSettings(map);
         //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
-
         QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
-
             @Override
             public void onViewInitFinished(boolean arg0) {
                 // TODO Auto-generated method stub
