@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.tsapp.utils.X5WebView;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.GeolocationPermissions;
@@ -17,17 +18,17 @@ import com.tencent.smtt.sdk.WebIconDatabase;
 import com.tencent.smtt.sdk.WebStorage;
 import com.tencent.smtt.sdk.WebViewDatabase;
 
-import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends Activity {
     private static boolean main_initialized = false;
@@ -77,6 +78,58 @@ public class MainActivity extends Activity {
         return result;
     }
 
+    @JavascriptInterface
+    public static  String getUrlFromRe(String jsonStr){
+        int uid = 37856;
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < uid; i++) {
+            list.add(i+1);
+        }
+        Random random = new Random();
+        int n = random.nextInt(list.size());
+        int num = list.get(n);
+        android.util.Log.i("tag", "来自JS的传参 :" + jsonStr);
+        JSONObject jsonValue = JSONObject.parseObject(jsonStr);
+        int chapterId = (int) jsonValue.get("chapterId");
+        int bookId = (int) jsonValue.get("bookId");
+        // url https://app.tingxiaoshuo.cc/listen/apptingchina/AppGetChapterUrl?uid=37658&chapterId=3671073&bookId=12323
+        String url = "https://app.tingxiaoshuo.cc/listen/apptingchina/AppGetChapterUrl?uid="+String.valueOf(num)+"&chapterId="+String.valueOf(chapterId)+"&bookId="+String.valueOf(bookId);
+        android.util.Log.i("tag", "来自JS的传参 :" + url);
+        String result = "";
+        BufferedReader in = null;// 读取响应输入流
+        try {
+            // 创建URL对象
+            java.net.URL connURL = new java.net.URL(url);
+            // 打开URL连接
+            java.net.HttpURLConnection httpConn = (java.net.HttpURLConnection) connURL
+                    .openConnection();
+            // 设置通用属性
+            httpConn.setRequestProperty("Host", "app.tingxiaoshuo.cc");
+            // 建立实际的连接
+            httpConn.connect();
+            // 定义BufferedReader输入流来读取URL的响应,并设置编码方式
+            in = new BufferedReader(new InputStreamReader(httpConn
+                    .getInputStream(), StandardCharsets.UTF_8));
+            String line;
+            // 读取返回的内容
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            android.util.Log.i("tag", "来自JS的传参 :出错了");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        android.util.Log.i("tag", "来自JS的传参 :" + result);
+        return result;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
