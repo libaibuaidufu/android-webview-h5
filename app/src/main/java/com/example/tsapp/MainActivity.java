@@ -118,6 +118,7 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             android.util.Log.i("tag", "来自JS的传参 :出错了");
             e.printStackTrace();
+            result = "{}";
         } finally {
             try {
                 if (in != null) {
