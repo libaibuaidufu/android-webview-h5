@@ -105,6 +105,8 @@ public class MainActivity extends Activity {
                     .openConnection();
             // 设置通用属性
             httpConn.setRequestProperty("Host", "app.tingxiaoshuo.cc");
+            httpConn.setConnectTimeout(5000);
+            httpConn.setReadTimeout(8000);
             // 建立实际的连接
             httpConn.connect();
             // 定义BufferedReader输入流来读取URL的响应,并设置编码方式
@@ -228,7 +230,7 @@ public class MainActivity extends Activity {
     public String getSoft() {
         android.util.Log.i("tt","getSoft了");
         HashMap<String,Object> map = new HashMap<>();
-        String version = "2.2";
+        String version = "2.4.2";
         boolean isX5 = false;
         if(mWebView.getX5WebViewExtension()!=null){
             isX5 = true;
