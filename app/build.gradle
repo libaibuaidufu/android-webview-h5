@@ -10,11 +10,12 @@ android {
         minSdk 21
         targetSdk 32
         versionCode 1
-        versionName "2.4.2"
+        versionName "2.4.4"
         ndk {
 //            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
             abiFilters "armeabi-v7a"
         }
+//        ndk{abiFilters "armeabi"}
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -28,6 +29,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {

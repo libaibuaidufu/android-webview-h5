@@ -8,15 +8,17 @@ import android.os.Bundle;
 
 
 import android.view.Window;
+import android.webkit.CookieManager;
+import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebIconDatabase;
+import android.webkit.WebSettings;
+import android.webkit.WebStorage;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.WebViewDatabase;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.tsapp.utils.X5WebView;
-import com.tencent.smtt.sdk.CookieManager;
-import com.tencent.smtt.sdk.GeolocationPermissions;
-import com.tencent.smtt.sdk.WebIconDatabase;
-import com.tencent.smtt.sdk.WebStorage;
-import com.tencent.smtt.sdk.WebViewDatabase;
 
 
 import java.io.BufferedReader;
@@ -27,12 +29,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-public class MainActivity extends Activity {
+public class TbsActivity extends Activity {
     private static boolean main_initialized = false;
-    private X5WebView mWebView;
+    private WebView mWebView;
     private Context mContext = null;
     private String routerPath;
     private boolean isShow;
@@ -137,24 +138,42 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
+
         // 取消标题
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // 进行全屏
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        mContext = this;
-        if (!main_initialized) {
-            this.new_init();
-        }
-    }
-
-    private void new_init() {
         android.util.Log.i("tag", "来自JS的传参 :我启动了");
-//        修改 res/layout 里面的 webview为 x5weiview
-        mWebView = (X5WebView) this.findViewById(R.id.tbsWebview);
+        mWebView = (WebView) this.findViewById(R.id.webview);
+        WebSettings webSetting = mWebView.getSettings();
+        webSetting.setJavaScriptEnabled(true);
+        webSetting.setAppCacheEnabled(true);
+        webSetting.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webSetting.setAllowUniversalAccessFromFileURLs(true);
+        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSetting.setAllowFileAccess(true);
+        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSetting.setUseWideViewPort(true);
+        webSetting.setSupportMultipleWindows(true);
+        webSetting.setAppCacheEnabled(true);
+        webSetting.setDomStorageEnabled(true);
+        webSetting.setGeolocationEnabled(true);
+        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
+        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+
+        mWebView.setWebViewClient(new WebViewClient() {
+            //覆盖shouldOverrideUrlLoading 方法
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
         mWebView.addJavascriptInterface(this, "androidinfo");//添加js监听 这样html就能调用客户端
         mWebView.loadUrl("file:android_asset/index.html");
-        main_initialized = true;
     }
 
     /**
@@ -232,9 +251,6 @@ public class MainActivity extends Activity {
         HashMap<String,Object> map = new HashMap<>();
         String version = "2.4.2";
         boolean isX5 = false;
-        if(mWebView.getX5WebViewExtension()!=null){
-            isX5 = true;
-        }
         android.util.Log.i("tt",version);
         android.util.Log.i("tt",String.valueOf(isX5));
         map.put("version", version);
